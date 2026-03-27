@@ -3,9 +3,13 @@ const ORDERS_URL = "https://functions.poehali.dev/f33e59d4-e0db-4324-9d08-1d4bc9
 const ADMIN_LOGIN_URL = "https://functions.poehali.dev/602256e6-9da5-4d30-9979-e19acad8f974";
 const ADMIN_PANEL_URL = "https://functions.poehali.dev/d53ef8a2-651e-4273-af39-ae1c9b4a3b08";
 
+const h = (token: string) => ({ "Content-Type": "application/json", "Authorization": `Bearer ${token}` });
+
 export const api = {
   menu: {
     getAll: () => fetch(MENU_URL),
+    getAddons: () => fetch(`${MENU_URL}/addons`),
+    getSettings: () => fetch(`${MENU_URL}/settings`),
   },
   orders: {
     create: (body: object) => fetch(ORDERS_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }),
@@ -13,12 +17,23 @@ export const api = {
   },
   admin: {
     login: (body: object) => fetch(ADMIN_LOGIN_URL, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) }),
-    getOrders: (token: string) => fetch(`${ADMIN_PANEL_URL}/orders`, { headers: { "Authorization": `Bearer ${token}` } }),
+    // orders
+    getOrders: (token: string) => fetch(`${ADMIN_PANEL_URL}/orders`, { headers: h(token) }),
     updateOrderStatus: (token: string, id: number, status: string) =>
-      fetch(`${ADMIN_PANEL_URL}/orders/${id}/status`, { method: "PUT", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }, body: JSON.stringify({ status }) }),
-    getMenu: (token: string) => fetch(`${ADMIN_PANEL_URL}/menu`, { headers: { "Authorization": `Bearer ${token}` } }),
-    createMenuItem: (token: string, body: object) => fetch(`${ADMIN_PANEL_URL}/menu`, { method: "POST", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }, body: JSON.stringify(body) }),
-    updateMenuItem: (token: string, id: number, body: object) => fetch(`${ADMIN_PANEL_URL}/menu/${id}`, { method: "PUT", headers: { "Content-Type": "application/json", "Authorization": `Bearer ${token}` }, body: JSON.stringify(body) }),
-    deleteMenuItem: (token: string, id: number) => fetch(`${ADMIN_PANEL_URL}/menu/${id}`, { method: "DELETE", headers: { "Authorization": `Bearer ${token}` } }),
+      fetch(`${ADMIN_PANEL_URL}/orders/${id}/status`, { method: "PUT", headers: h(token), body: JSON.stringify({ status }) }),
+    payOrder: (token: string, id: number, payment_method: string) =>
+      fetch(`${ADMIN_PANEL_URL}/orders/${id}/pay`, { method: "PUT", headers: h(token), body: JSON.stringify({ payment_method }) }),
+    // menu
+    createMenuItem: (token: string, body: object) => fetch(`${ADMIN_PANEL_URL}/menu`, { method: "POST", headers: h(token), body: JSON.stringify(body) }),
+    updateMenuItem: (token: string, id: number, body: object) => fetch(`${ADMIN_PANEL_URL}/menu/${id}`, { method: "PUT", headers: h(token), body: JSON.stringify(body) }),
+    deleteMenuItem: (token: string, id: number) => fetch(`${ADMIN_PANEL_URL}/menu/${id}`, { method: "DELETE", headers: h(token) }),
+    // addons
+    getAddons: (token: string) => fetch(`${ADMIN_PANEL_URL}/addons`, { headers: h(token) }),
+    createAddon: (token: string, body: object) => fetch(`${ADMIN_PANEL_URL}/addons`, { method: "POST", headers: h(token), body: JSON.stringify(body) }),
+    updateAddon: (token: string, id: number, body: object) => fetch(`${ADMIN_PANEL_URL}/addons/${id}`, { method: "PUT", headers: h(token), body: JSON.stringify(body) }),
+    deleteAddon: (token: string, id: number) => fetch(`${ADMIN_PANEL_URL}/addons/${id}`, { method: "DELETE", headers: h(token) }),
+    // settings
+    getSettings: (token: string) => fetch(`${ADMIN_PANEL_URL}/settings`, { headers: h(token) }),
+    saveSettings: (token: string, body: object) => fetch(`${ADMIN_PANEL_URL}/settings`, { method: "PUT", headers: h(token), body: JSON.stringify(body) }),
   },
 };
