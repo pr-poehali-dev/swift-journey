@@ -1,0 +1,12 @@
+{
+  "tests": [
+    {
+      "name": "Получение меню",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"items": []},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

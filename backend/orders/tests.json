@@ -1,0 +1,13 @@
+{
+  "tests": [
+    {
+      "name": "Создание заказа",
+      "method": "POST",
+      "path": "/",
+      "body": {"customer_name": "Тест", "items": [{"name": "Эспрессо", "quantity": 1, "price": 180}], "total": 180},
+      "expectedStatus": 200,
+      "expectedBody": {"status": "new"},
+      "bodyMatcher": "partial"
+    }
+  ]
+}

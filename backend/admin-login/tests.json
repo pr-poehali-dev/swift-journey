@@ -1,0 +1,21 @@
+{
+  "tests": [
+    {
+      "name": "Успешный вход",
+      "method": "POST",
+      "path": "/",
+      "body": {"login": "admin", "code": "coffee2024"},
+      "expectedStatus": 200,
+      "expectedBody": {"login": "admin"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Неверный код",
+      "method": "POST",
+      "path": "/",
+      "body": {"login": "admin", "code": "wrongcode"},
+      "expectedStatus": 401,
+      "bodyMatcher": "partial"
+    }
+  ]
+}
